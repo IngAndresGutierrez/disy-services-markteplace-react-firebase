@@ -1,15 +1,19 @@
 /* import external modules */
-import React, { useState } from 'react'
-import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
-import Typography from '@material-ui/core/Typography'
-import IconButton from '@material-ui/core/IconButton'
+import React from 'react'
+import { useHistory } from 'react-router-dom'
+import {
+  AppBar,
+  //Icon,
+  Button,
+  Toolbar,
+  Typography,
+  IconButton,
+} from '@material-ui/core/'
 import MenuIcon from '@material-ui/icons/Menu'
-import AccountCircle from '@material-ui/icons/AccountCircle'
+/*import AccountCircle from '@material-ui/icons/AccountCircle'
 import MenuItem from '@material-ui/core/MenuItem'
-import Menu from '@material-ui/core/Menu'
+import Menu from '@material-ui/core/Menu'*/
 import { connect } from 'react-redux'
-
 /* import internal modules */
 import useStyles from './styles'
 
@@ -26,26 +30,29 @@ import useStyles from './styles'
 
 const Header = (props) => {
   const classes = useStyles()
-  const [anchorEl, setAnchorEl] = useState(null)
-  const open = Boolean(anchorEl)
+  const history = useHistory()
+  // const [anchorEl, setAnchorEl] = useState(null)
+  //const open = Boolean(anchorEl)
 
   /**
    * @function
    * @description This function show user options on header bar
    * @param {event} event Event received from user interaction
    */
-  const handleMenu = (event) => {
+
+  /*const handleMenu = (event) => {
     setAnchorEl(event.currentTarget)
-  }
+  }*/
 
   /**
    * @function
    * @description This function close user options on header bar
    * @param {event} event Event received from user interaction
    */
-  const handleClose = () => {
+
+  /*const handleClose = () => {
     setAnchorEl(null)
-  }
+  }*/
 
   return (
     <div className={classes.root}>
@@ -62,6 +69,17 @@ const Header = (props) => {
           <Typography variant="h6" className={classes.title}>
             Buscador de servicios
           </Typography>
+
+          <Button
+            variant="outlined"
+            className={classes.button}
+            color="inherit"
+            onClick={() => history.push('/publicar_servicio')}
+          >
+            Publicar Servicio
+          </Button>
+
+          {/*
           <IconButton
             aria-label="account of current user"
             aria-controls="menu-appbar"
@@ -89,6 +107,7 @@ const Header = (props) => {
             <MenuItem onClick={handleClose}>Profile</MenuItem>
             <MenuItem onClick={handleClose}>My account</MenuItem>
           </Menu>
+          */}
         </Toolbar>
       </AppBar>
     </div>

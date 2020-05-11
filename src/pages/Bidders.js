@@ -2,6 +2,7 @@
 import React from 'react'
 
 /* import internal modules */
+import Layout from '../components/Layout'
 
 /**
  *  @description This is a Bidders page
@@ -16,10 +17,12 @@ import React from 'react'
 
 const BiddersPage = () => {
   return (
-    <h3>
-      Listado de personas que prestan el servicio según la subcategoria
-      seleccionada
-    </h3>
+    <Layout>
+      <h3>
+        Listado de personas que prestan el servicio según la subcategoria
+        seleccionada
+      </h3>
+    </Layout>
   )
 }
 

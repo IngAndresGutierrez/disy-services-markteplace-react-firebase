@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core/styles'
 
 const useStyles = makeStyles((theme) => ({
   media: {
-    height: 100,
+    height: 120,
   },
   title: {
     textAlign: 'left',

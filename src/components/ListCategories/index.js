@@ -27,7 +27,7 @@ const ListCategories = () => {
 
   let listCategories = data.map((category) => {
     return (
-      <Grid item xs={4} key={category.id}>
+      <Grid item xs={6} md={4} key={category.id}>
         <Category category={category} />
       </Grid>
     )

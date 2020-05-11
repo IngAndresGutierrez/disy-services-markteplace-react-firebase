@@ -3,6 +3,7 @@ import React from 'react'
 
 /* import internal modules */
 import SignIn from '../components/Login'
+import Layout from '../components/Layout'
 
 /**
  *  @description This is a login page
@@ -16,7 +17,11 @@ import SignIn from '../components/Login'
  **/
 
 const LoginPage = ({ history }) => {
-  return <SignIn />
+  return (
+    <Layout>
+      <SignIn />
+    </Layout>
+  )
 }
 
 export default LoginPage

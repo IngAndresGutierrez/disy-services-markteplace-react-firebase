@@ -3,6 +3,7 @@ import React from 'react'
 
 /* import internal modules */
 import ListSubCategories from '../components/ListSubCategories'
+import Layout from '../components/Layout'
 
 /**
  *  @description This is a subcategories page
@@ -16,7 +17,11 @@ import ListSubCategories from '../components/ListSubCategories'
  **/
 
 const SubCategoriesPage = () => {
-  return <ListSubCategories />
+  return (
+    <Layout>
+      <ListSubCategories />
+    </Layout>
+  )
 }
 
 export default SubCategoriesPage

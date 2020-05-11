@@ -3,7 +3,7 @@ import React from 'react'
 
 /* import internal modules */
 import ListCategories from '../components/ListCategories'
-
+import Layout from '../components/Layout'
 /**
  *  @description This is a home page
  *  @version 1.0.0
@@ -16,7 +16,11 @@ import ListCategories from '../components/ListCategories'
  **/
 
 const HomePage = () => {
-  return <ListCategories />
+  return (
+    <Layout>
+      <ListCategories />
+    </Layout>
+  )
 }
 
 export default HomePage

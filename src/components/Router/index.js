@@ -7,6 +7,7 @@ const LazyLoginPage = lazy(() => import('../../pages/Login'))
 const LazyHomePage = lazy(() => import('../../pages/Home'))
 const LazySubCategoriesPage = lazy(() => import('../../pages/SubCategories'))
 const LazyBiddersPage = lazy(() => import('../../pages/Bidders'))
+const LazyPublishServicePage = lazy(() => import('../../pages/PublishService'))
 
 /**
  *  @description This functional component is a router of all project
@@ -31,6 +32,7 @@ class Router extends Component {
             component={LazySubCategoriesPage}
           />
           <Route path="/oferentes/:name" component={LazyBiddersPage} />
+          <Route path="/publicar_servicio" component={LazyPublishServicePage} />
         </Switch>
       </BrowserRouter>
     )

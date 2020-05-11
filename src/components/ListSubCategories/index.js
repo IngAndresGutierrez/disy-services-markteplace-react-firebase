@@ -39,7 +39,7 @@ const ListSubCategories = () => {
    * */
   const listSubCategories = subcategories.map((subcategory) => {
     return (
-      <Grid item xs={4} key={subcategory.id}>
+      <Grid item xs={6} md={4} key={subcategory.id}>
         <SubCategory key={subcategory.id} subcategory={subcategory} />
       </Grid>
     )

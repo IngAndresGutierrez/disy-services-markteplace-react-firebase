@@ -1,115 +1,239 @@
-/* import external modules */
 import React from 'react'
-import Avatar from '@material-ui/core/Avatar'
-import Button from '@material-ui/core/Button'
-import CssBaseline from '@material-ui/core/CssBaseline'
-import TextField from '@material-ui/core/TextField'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
-import Checkbox from '@material-ui/core/Checkbox'
-import Link from '@material-ui/core/Link'
-import Grid from '@material-ui/core/Grid'
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined'
-import Typography from '@material-ui/core/Typography'
-import Container from '@material-ui/core/Container'
-import { useHistory } from 'react-router-dom'
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link,
+  Redirect,
+  useHistory,
+  useLocation,
+} from 'react-router-dom'
+import * as firebase from 'firebase/app'
+import 'firebase/auth'
 
-/* import internal modules */
-import useStyles from './styles'
+// This example has 3 pages: a public page, a protected
+// page, and a login screen. In order to see the protected
+// page, you must first login. Pretty standard stuff.
+//
+// First, visit the public page. Then, visit the protected
+// page. You're not yet logged in, so you are redirected
+// to the login page. After you login, you are redirected
+// back to the protected page.
+//
+// Notice the URL change each time. If you click the back
+// button at this point, would you expect to go back to the
+// login page? No! You're already logged in. Try it out,
+// and you'll see you go back to the page you visited
+// just *before* logging in, the public page.
 
-/**
- *  @description This functional component is a Login of the project
- *  @version 1.0.0
- *  @since 03/05/2020
- *  @author Jaime Andrés Gómez Gutiérrez <g.gutierrez.j.andres@gmail.com>
- *
- *  @function
- *  @name SignIn
- *  @returns {Component} Returns a component with material-ui items for the form
- **/
-
-const SignIn = () => {
-  const classes = useStyles()
-  let history = useHistory()
-
-  /**
-   * @function
-   * @description This function validate a user credentials
-   */
-  function login() {
-    redirectTopage('/home')
-  }
-
-  /**
-   * @function
-   * @description This function show user options on header bar
-   * @param {String} url Target to redirect
-   */
-  function redirectTopage(url) {
-    history.push(url)
-  }
-
+export default function AuthExample() {
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h5">
-          Sign in
-        </Typography>
-        <form className={classes.form} noValidate>
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-          />
-          <TextField
-            variant="outlined"
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
-          <Button
-            fullWidth
-            variant="contained"
-            color="primary"
-            className={classes.submit}
-            onClick={() => login()}
-          >
-            Sign In
-          </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link href="#" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
-          </Grid>
-        </form>
+    <Router>
+      <div>
+        <AuthButton />
+
+        <ul>
+          <li>
+            <Link to="/public">Public Page</Link>
+          </li>
+          <li>
+            <Link to="/protected">Protected Page</Link>
+          </li>
+        </ul>
+
+        <Switch>
+          <Route path="/public">
+            <PublicPage />
+          </Route>
+          <Route path="/login">
+            <LoginPage />
+          </Route>
+          <PrivateRoute path="/protected">
+            <ProtectedPage />
+          </PrivateRoute>
+        </Switch>
       </div>
-    </Container>
+    </Router>
   )
 }
 
-export default SignIn
+firebase.auth().onAuthStateChanged(function (user) {
+  if (user) {
+    // User is signed in.
+    var displayName = user.displayName
+    var email = user.email
+    var emailVerified = user.emailVerified
+    var photoURL = user.photoURL
+    var isAnonymous = user.isAnonymous
+    var uid = user.uid
+    var providerData = user.providerData
+
+    console.log(displayName)
+    console.log(email)
+    console.log(emailVerified)
+    console.log(photoURL)
+    console.log(isAnonymous)
+    console.log(uid)
+    console.log(providerData)
+
+    // ...
+  } else {
+    // User is signed out.
+    // ...
+  }
+})
+
+function loginWithGoogle(cb) {
+  var provider = new firebase.auth.GoogleAuthProvider()
+  //provider.addScope('https://www.googleapis.com/auth/contacts.readonly')
+  //firebase.auth().useDeviceLanguage()
+
+  firebase
+    .auth()
+    .signInWithPopup(provider)
+    .then(function (result) {
+      // This gives you a Google Access Token. You can use it to access the Google API.
+      var token = result.credential.accessToken
+      // The signed-in user info.
+      var user = result.user
+
+      console.log(user, token)
+      fakeAuthGoogle.isAuthenticated = true
+      setTimeout(cb, 100) // fake async
+    })
+    .catch(function (error) {
+      // Handle Errors here.
+      var errorCode = error.code
+      var errorMessage = error.message
+      // The email of the user's account used.
+      var email = error.email
+      // The firebase.auth.AuthCredential type that was used.
+      var credential = error.credential
+
+      console.log(errorCode, errorMessage, email, credential)
+    })
+}
+
+function loginWithFacebook(cb) {
+  var provider = new firebase.auth.FacebookAuthProvider()
+
+  firebase
+    .auth()
+    .signInWithPopup(provider)
+    .then(function (result) {
+      // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+      var token = result.credential.accessToken
+      // The signed-in user info.
+      var user = result.user
+      console.log(user, token)
+      fakeAuthGoogle.isAuthenticated = true
+      setTimeout(cb, 100) // fake async
+    })
+    .catch(function (error) {
+      // Handle Errors here.
+      var errorCode = error.code
+      var errorMessage = error.message
+      // The email of the user's account used.
+      var email = error.email
+      // The firebase.auth.AuthCredential type that was used.
+      var credential = error.credential
+      console.log(errorCode, errorMessage, email, credential)
+    })
+}
+
+const fakeAuthGoogle = {
+  isAuthenticated: false,
+  authenticate(cb) {
+    loginWithGoogle(cb)
+  },
+  signout(cb) {
+    fakeAuthGoogle.isAuthenticated = false
+    setTimeout(cb, 100)
+  },
+}
+
+const fakeAuthFacebook = {
+  isAuthenticated: false,
+  authenticate(cb) {
+    loginWithFacebook(cb)
+  },
+  signout(cb) {
+    fakeAuthFacebook.isAuthenticated = false
+    setTimeout(cb, 100)
+  },
+}
+
+function AuthButton() {
+  let history = useHistory()
+
+  return fakeAuthGoogle.isAuthenticated ? (
+    <p>
+      Welcome!{' '}
+      <button
+        onClick={() => {
+          fakeAuthGoogle.signout(() => history.push('/'))
+        }}
+      >
+        Sign out
+      </button>
+    </p>
+  ) : (
+    <p>You are not logged in.</p>
+  )
+}
+
+// A wrapper for <Route> that redirects to the login
+// screen if you're not yet authenticated.
+function PrivateRoute({ children, ...rest }) {
+  return (
+    <Route
+      {...rest}
+      render={({ location }) =>
+        fakeAuthGoogle.isAuthenticated || fakeAuthFacebook.isAuthenticated ? (
+          children
+        ) : (
+          <Redirect
+            to={{
+              pathname: '/login',
+              state: { from: location },
+            }}
+          />
+        )
+      }
+    />
+  )
+}
+
+function PublicPage() {
+  return <h3>Public</h3>
+}
+
+function ProtectedPage() {
+  return <h3>Protected</h3>
+}
+
+function LoginPage() {
+  let history = useHistory()
+  let location = useLocation()
+
+  let { from } = location.state || { from: { pathname: '/' } }
+  let loginGoogle = () => {
+    fakeAuthGoogle.authenticate(() => {
+      history.replace(from)
+    })
+  }
+
+  let loginFacebook = () => {
+    fakeAuthFacebook.authenticate(() => {
+      history.replace(from)
+    })
+  }
+
+  return (
+    <div>
+      <p>You must log in to view the page at {from.pathname}</p>
+      <button onClick={loginGoogle}>Log in Google</button>
+      <button onClick={loginFacebook}>Log in Facebook</button>
+    </div>
+  )
+}
